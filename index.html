@@ -18,14 +18,14 @@
       </div>
 
       <div class="relative my-20 lg:mx-40">
-        <img src="/ss.png" alt="" class="w-full h-full object-cover rounded-lg" />
+        <img src="ss.png" alt="" class="w-full h-full object-cover rounded-lg" />
       </div>
     </div>
   </div>
 
   <script type="text/javascript">
     var client = new XMLHttpRequest();
-    client.open('GET', '/bookmarklet.js');
+    client.open('GET', 'bookmarklet.js');
     client.onreadystatechange = function() {
       const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r)/gm, '');
       const code = `javascript:${encodeURIComponent(bookmarkletScript)}`;
