@@ -62,13 +62,19 @@
   totalHours += Math.floor(totalMinutes / 60);
   totalMinutes = remainingMinutes;
 
-  const totalHoursLabel = `
-    <label for="HaftalikCalismaSuresi" class="fr" style="width: 11em;">Haftalık Çalışma Süresi:</label>
-  `;
-  const totalHoursInput = `
-    <input class="fr" disabled="disabled" id="HaftalikCalismaSuresi" name="HaftalikCalismaSuresi" style="width:100px;margin-right:10px" title="toplam çalışma süresi" type="text" value="${totalHours}:${totalMinutes} saat">
-  `;
+  let totalHoursInput = $('#HaftalikCalismaSuresi');
 
-  workedHoursLabel.insertAdjacentHTML('afterend', totalHoursLabel);
-  workedHoursLabel.insertAdjacentHTML('afterend', totalHoursInput);
+  if (totalHoursInput) {
+    totalHoursInput.value = `${totalHours}:${totalMinutes} saat`;
+  } else {
+    const totalHoursLabel = `
+      <label for="HaftalikCalismaSuresi" class="fr" style="width: 11em;">Haftalık Çalışma Süresi:</label>
+    `;
+    totalHoursInput = `
+      <input class="fr" disabled="disabled" id="HaftalikCalismaSuresi" name="HaftalikCalismaSuresi" style="width:100px;margin-right:10px" title="toplam çalışma süresi" type="text" value="${totalHours}:${totalMinutes} saat">
+    `;
+
+    workedHoursLabel.insertAdjacentHTML('afterend', totalHoursLabel);
+    workedHoursLabel.insertAdjacentHTML('afterend', totalHoursInput);
+  }
 })();
