@@ -42,8 +42,11 @@
 
   let totalHours = 0;
   let totalMinutes = 0;
+  let isLastLogEntryToday = false;
   let totalHoursWithToday = 0;
   let totalMinutesWithToday = 0;
+  let totalRemainingHours = 0;
+  let totalRemainingMinutes = 0;
 
   lastWeekHours.forEach(day => {
     let [hours, minutes] = day.totalHours.split(':');
@@ -65,7 +68,7 @@
     const now = dayjs();
     const [lastLogEntryDate, lastLogEntryTime] = lastLogEntry.innerText.split(' ');
     const lastLogEntryDateObj = dayjs(lastLogEntryDate, 'DD.MM.YYYY');
-    const isLastLogEntryToday = lastLogEntryDateObj.isSame(now, 'day');
+    isLastLogEntryToday = lastLogEntryDateObj.isSame(now, 'day');
 
     if (isLastLogEntryToday) {
       const [lastEntryHour, lastEntryMinute] = lastLogEntryTime.split(':');
@@ -103,8 +106,15 @@
   console.log('totalWorkingHoursWithToday', `${totalHoursWithToday}:${totalMinutesWithToday}`);
   console.log('=======');
 
+  totalRemainingHours = 44 - totalHoursWithToday;
+  totalRemainingMinutes = 60 - totalMinutesWithToday;
+  totalRemainingHours += Math.floor(totalRemainingMinutes / 60);
+  console.log('totalRemainingHours', `${totalRemainingHours}:${totalRemainingMinutes}`);
+  console.log('=======');
+
   let totalHoursInput = $('#HaftalikCalismaSuresi');
   let totalHoursWithTodayInput = $('#BugunleBirlikteHaftalikCalismaSuresi');
+  let totalRemainingHoursInput = $('#KalanSure');
 
   if (totalHoursInput) {
     totalHoursInput.value = `${totalHours}:${totalMinutes} saat`;
@@ -113,7 +123,7 @@
       <label for="HaftalikCalismaSuresi" class="fr" style="width: 11em;">Haftalık Çalışma Süresi:</label>
     `;
     totalHoursInput = `
-      <input class="fr" disabled="disabled" id="HaftalikCalismaSuresi" name="HaftalikCalismaSuresi" style="width:100px;margin-right:10px" title="toplam çalışma süresi" type="text" value="${totalHours}:${totalMinutes} saat">
+      <input class="fr" disabled="disabled" id="HaftalikCalismaSuresi" name="HaftalikCalismaSuresi" style="width:100px;margin-right:10px" type="text" value="${totalHours}:${totalMinutes} saat">
     `;
 
     workedHoursLabel.insertAdjacentHTML('afterend', totalHoursLabel);
@@ -123,14 +133,28 @@
   if (totalHoursWithTodayInput) {
     totalHoursWithTodayInput.value = `${totalHoursWithToday}:${totalMinutesWithToday} saat`;
   } else if (logsWrapper?.parentElement) {
-    const withWrapper = (child) => `<p class="fr">${child}</p>`;
+    const withWrapper = (child) => `<p>${child}</p>`;
     const totalHoursWithTodayLabel = `
-      <label for="BugunleBirlikteHaftalikCalismaSuresi" class="fr" style="width: 18.5em;">Bugünle Birlikte Haftalık Çalışma Süresi:</label>
+      <label for="BugunleBirlikteHaftalikCalismaSuresi" style="width: 18.5em;">Bugünle Birlikte Haftalık Çalışma Süresi:</label>
     `;
     totalHoursWithTodayInput = `
-      <input class="fr" disabled="disabled" id="BugunleBirlikteHaftalikCalismaSuresi" name="BugunleBirlikteHaftalikCalismaSuresi" style="width:100px;margin-right:10px" title="toplam çalışma süresi" type="text" value="${totalHoursWithToday}:${totalMinutesWithToday} saat">
+      <input disabled="disabled" id="BugunleBirlikteHaftalikCalismaSuresi" name="BugunleBirlikteHaftalikCalismaSuresi" style="width:100px;margin-right:10px" type="text" value="${totalHoursWithToday}:${totalMinutesWithToday} saat">
     `;
 
     logsWrapper.parentElement.insertAdjacentHTML('afterend', withWrapper(`${totalHoursWithTodayInput}${totalHoursWithTodayLabel}`));
+  }
+
+  if (totalRemainingHoursInput) {
+    totalRemainingHoursInput.value = `${totalRemainingHours}:${totalRemainingMinutes} saat`;
+  } else if (logsWrapper?.parentElement) {
+    const withWrapper = (child) => `<p>${child}</p>`;
+    const totalRemainingHoursLabel = `
+      <label for="KalanSure" style="width: 18.5em;">Kalan Süre:</label>
+    `;
+    totalRemainingHoursInput = `
+      <input disabled="disabled" id="KalanSure" name="KalanSure" style="width:100px;margin-right:10px" type="text" value="${totalRemainingHours}:${totalRemainingMinutes} saat">
+    `;
+
+    logsWrapper.parentElement.insertAdjacentHTML('afterend', withWrapper(`${totalRemainingHoursInput}${totalRemainingHoursLabel}`));
   }
 })();
