@@ -65,7 +65,7 @@
     }
 
     function addChild(child) {
-        const withWrapper = (c) => `<div class="script-input">${c}</div>`;
+        const withWrapper = (c) => `<div class="script-input ${child.class}">${c}</div>`;
         const label = `
         <label style="font-size:1.3rem;float:left;font-weight:bold;width:9.2em;text-align:right;margin-top:3px">${child.label}:</label>
         `;
@@ -95,19 +95,22 @@
         });
 
         /** TODAY */
+        const todayRemainingElem = 'today-remaining';
         let th = 0, tm = 0;
         if (firstRecord && today.isSame(dayjs(firstRecord), 'day')) {
             const diff = today.diff(firstRecord, 'hour', true);
             [th, tm] = calculateTime(diff);
             const [rh, rm] = calculateRemaining(diff);
             addChild({label: `Bugün`, value: th > 0 ? `${th} saat, ${tm} dakika` : `${tm} dakika`});
-            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`});
+            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`, class: todayRemainingElem});
             console.log(`Today: ${th} hours, ${tm} minutes`);
             console.log(`Remaining: ${rh} hours, ${rm} minutes`);
         }
 
         /** WEEK */
+        const weekRemainingElem = 'week-remaining';
         let weekTotal = 0;
+        /** [TODO] */
         const month = dayjs().date(1);
         const weekStart = dayjs(getFirstDayOfTheWeek());
         const monthlyList = tableTwo.querySelectorAll('tbody > tr');
@@ -134,7 +137,11 @@
             addChild({label: `Bugün + Bu Hafta`, value: `${wth} saat, ${wtm} dakika`});
 
             const [rth, rtm] = calculateRemaining(weekTotalWithToday, true);
-            addChild({label: `Bu Hafta Kalan`, value: `${rth} saat, ${rtm} dakika`});
+            addChild({label: `Bu Hafta Kalan`, value: `${rth} saat, ${rtm} dakika`, class: weekRemainingElem});
+
+            if (today.day() === 5 && rth < 9) {
+                document.querySelector(`div.${todayRemainingElem}`)?.remove();
+            }
         }
     }
 
