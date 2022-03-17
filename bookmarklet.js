@@ -1,13 +1,10 @@
 (function(){
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-
-    if (!$('#grid_kesin_giris_cikis')) {
+    if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
         return;
     }
 
-    const month = $('select#Donem_Id');
+    const month = document.querySelector('select#Donem_Id');
     if (!month || month.value === 'null') {
         alert('Please select a month for your records.');
         return;
@@ -50,7 +47,7 @@
 
     function addNoticeBox() {
         const boxId = 'script-notice-box';
-        $(`#${boxId}`)?.remove();
+        document.querySelector(`#${boxId}`)?.remove();
         const box = document.createElement('div');
         box.id = boxId;
         Object.assign(box.style, {
@@ -74,13 +71,13 @@
         const input = `
         <p style="font-size:1.5rem;width:10em;margin-right:5px;margin-left:5px;display:inline-block;margin-top:1px;">${child.value}</p>
         `;
-        $('#script-notice-box').insertAdjacentHTML('beforeend', withWrapper(`${label}${input}`));
+        document.querySelector('#script-notice-box').insertAdjacentHTML('beforeend', withWrapper(`${label}${input}`));
     }
 
     function app() {
         const today = dayjs();
-        $$('.script-input').forEach(row => { row.remove(); });
-        const [tableOne, tableTwo] = $$('div.flexgrid');
+        document.querySelectorAll('.script-input').forEach(row => { row.remove(); });
+        const [tableOne, tableTwo] = document.querySelectorAll('div.flexgrid');
 
         let firstRecord = null;
         const times = tableOne.querySelectorAll(`tbody > tr`);
@@ -94,7 +91,7 @@
             if (today.isSame(dayjs(time), 'day') && !firstRecord) {
                 firstRecord = time;
             }
-        })
+        });
 
         /** TODAY */
         let th = 0, tm = 0;
@@ -103,7 +100,7 @@
             [th, tm] = calculateTime(diff);
             const [rh, rm] = calculateRemaining(diff);
             addChild({label: `Bugün`, value: th > 0 ? `${th} saat, ${tm} dakika` : `${tm} dakika`});
-            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`});
+            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm+1} dakika` : `${rm} dakika`});
             console.log(`Today: ${th} hours, ${tm} minutes`);
             console.log(`Remaining: ${rh} hours, ${rm} minutes`);
         }
@@ -126,7 +123,7 @@
 
                 const [wh, wm] = row.querySelector('td:nth-child(6)').innerText.split(':');
                 weekTotal += ((parseInt(wh) * 60) + parseInt(wm));
-            })
+            });
         
             const [wh, wm] = calculateTime(weekTotal / 60);
             addChild({label: `Bu Hafta`, value: `${wh} saat, ${wm} dakika`});
