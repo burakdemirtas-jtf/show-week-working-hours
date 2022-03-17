@@ -14,7 +14,7 @@
       <p class="max-w-screen-lg text-lg sm:text-2xl sm:leading-10 font-medium text-center mb-10 sm:mb-11 mx-auto">Drag this button to your bookmark bar,<br /> go to your ARGE Portal and open hours panel,<br /> click the bookmarklet.</p>
       <div class="flex flex-wrap flex-col items-center justify-center space-y-4 text-center">
         <a class="w-full sm:w-auto flex-none bg-gray-900 hover:bg-gray-700 text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-900 focus:outline-none transition-colors duration-200" id="bookmarklet" href="">Show Total Hours for the Last Week</a>
-        <span class="text-gray-300">Lastest Version: 2.0.0</span>
+        <span class="text-gray-300">Latest Version: v2.0.0</span>
       </div>
 
       <div class="relative my-10 lg:mx-40">
@@ -27,7 +27,7 @@
     var client = new XMLHttpRequest();
     client.open('GET', 'bookmarklet.js');
     client.onreadystatechange = function() {
-      const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r)/gm, '');
+      const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r|\t)/gm, '');
       const code = `javascript:${encodeURIComponent(bookmarkletScript)}`;
       document.querySelector('#bookmarklet').setAttribute('href', code);
     }
