@@ -99,13 +99,13 @@ function app() {
     let weekTotal = 0;
     const month = dayjs().date(1);
     const weekStart = dayjs(getFirstDayOfTheWeek());
-    const monthlyList = tableTwo.querySelectorAll('tbody > tr')
+    const monthlyList = tableTwo.querySelectorAll('tbody > tr');
     if (monthlyList.length > 0) {
         let firstDayOfWeek = false;
         monthlyList.forEach(row => {
             const [rowDate, _] = timeNormalize(row.querySelector('td:nth-child(3)').innerText);
             if (!firstDayOfWeek && weekStart.isSame(dayjs(`${rowDate}`), 'day')) {
-                firstDayOfWeek = true
+                firstDayOfWeek = true;
             }
             if (!firstDayOfWeek) {
                 return;
@@ -119,10 +119,10 @@ function app() {
         addChild({label: `Bu Hafta`, value: `${wh} saat, ${wm} dakika`});
 
         const weekTotalWithToday = (weekTotal + ((th * 60) + tm)) / 60;
-        const [wth, wtm] = calculateTime(weekTotalWithToday)
+        const [wth, wtm] = calculateTime(weekTotalWithToday);
         addChild({label: `Bugün + Bu Hafta`, value: `${wth} saat, ${wtm} dakika`});
 
-        const [rth, rtm] = calculateRemaining(weekTotalWithToday, true)
+        const [rth, rtm] = calculateRemaining(weekTotalWithToday, true);
         addChild({label: `Bu Hafta Kalan`, value: `${rth} saat, ${rtm} dakika`});
     }
 }
@@ -142,4 +142,4 @@ function app() {
 
     addNoticeBox();
     app();
-})()
+})();
