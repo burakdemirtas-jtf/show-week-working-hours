@@ -58,6 +58,7 @@
             backgroundColor: 'white',
             zIndex: '9999',
             paddingTop: '10px',
+            paddingLeft: '10px',
             boxShadow: '0 5px 10px rgb(0 0 0 / 20%)',
         });
         document.body.appendChild(box);
@@ -100,7 +101,7 @@
             [th, tm] = calculateTime(diff);
             const [rh, rm] = calculateRemaining(diff);
             addChild({label: `Bugün`, value: th > 0 ? `${th} saat, ${tm} dakika` : `${tm} dakika`});
-            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm+1} dakika` : `${rm} dakika`});
+            addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`});
             console.log(`Today: ${th} hours, ${tm} minutes`);
             console.log(`Remaining: ${rh} hours, ${rm} minutes`);
         }
