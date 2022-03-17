@@ -27,7 +27,7 @@
     var client = new XMLHttpRequest();
     client.open('GET', 'bookmarklet.js');
     client.onreadystatechange = function() {
-      const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r|\t)/gm, '');
+      const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r)/gm, '');
       const code = `javascript:${encodeURIComponent(bookmarkletScript)}`;
       document.querySelector('#bookmarklet').setAttribute('href', code);
     }
