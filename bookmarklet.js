@@ -42,7 +42,10 @@
         let [date, time] = value.split(' ');
         date = date.split('.').reverse().join('-');
 
-        return [date, time];
+        return [
+            date?.trim().replace(/(\r\n|\n|\r)/gm, ''),
+            time?.trim().replace(/(\r\n|\n|\r)/gm, ''),
+        ];
     }
 
     function addNoticeBox() {
@@ -80,6 +83,7 @@
         document.querySelectorAll('.script-input').forEach(row => { row.remove(); });
         const [tableOne, tableTwo] = document.querySelectorAll('div.flexgrid');
 
+        /** TODAY */
         let firstRecord = null;
         const times = tableOne.querySelectorAll(`tbody > tr`);
         times.forEach(row => {
@@ -94,7 +98,6 @@
             }
         });
 
-        /** TODAY */
         const todayRemainingElem = 'today-remaining';
         let th = 0, tm = 0;
         if (firstRecord && today.isSame(dayjs(firstRecord), 'day')) {
