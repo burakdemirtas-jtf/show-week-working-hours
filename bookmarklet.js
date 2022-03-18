@@ -1,4 +1,6 @@
 (function(){
+    const version = 'v2.1.0';
+
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
         return;
@@ -68,7 +70,7 @@
     }
 
     function addChild(child) {
-        const withWrapper = (c) => `<div class="script-input ${child.class}">${c}</div>`;
+        const withWrapper = (c) => `<div class="script-input ${child.class}" style="${child.style}">${c}</div>`;
         const label = `
         <label style="font-size:1.3rem;float:left;font-weight:bold;width:9.2em;text-align:right;margin-top:3px">${child.label}:</label>
         `;
@@ -100,10 +102,11 @@
 
         const todayRemainingElem = 'today-remaining';
         let th = 0, tm = 0;
+        let rh = 9, rm = 0;
         if (firstRecord && today.isSame(dayjs(firstRecord), 'day')) {
             const diff = today.diff(firstRecord, 'hour', true);
             [th, tm] = calculateTime(diff);
-            const [rh, rm] = calculateRemaining(diff);
+            [rh, rm] = calculateRemaining(diff);
             addChild({label: `Bugün`, value: th > 0 ? `${th} saat, ${tm} dakika` : `${tm} dakika`});
             addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`, class: todayRemainingElem});
             console.log(`Today: ${th} hours, ${tm} minutes`);
@@ -121,15 +124,20 @@
             let firstDayOfWeek = false;
             monthlyList.forEach(row => {
                 const [rowDate, _] = timeNormalize(row.querySelector('td:nth-child(3)').innerText);
-                if (!firstDayOfWeek && weekStart.isSame(dayjs(`${rowDate}`), 'day')) {
+                if (!firstDayOfWeek && (
+                    weekStart.isSame(dayjs(`${rowDate}`), 'day') ||
+                    weekStart.isBefore(dayjs(`${rowDate}`), 'day')
+                )) {
                     firstDayOfWeek = true;
                 }
                 if (!firstDayOfWeek) {
                     return;
                 }
 
-                const [wh, wm] = row.querySelector('td:nth-child(6)').innerText.split(':');
-                weekTotal += ((parseInt(wh) * 60) + parseInt(wm));
+                let [wh, wm] = row.querySelector('td:nth-child(6)').innerText.split(':');
+                wh = parseInt(wh);
+                wh = wh > 11 ? 11 : wh;
+                weekTotal += ((wh * 60) + parseInt(wm));
             });
         
             const [wh, wm] = calculateTime(weekTotal / 60);
@@ -139,13 +147,25 @@
             const [wth, wtm] = calculateTime(weekTotalWithToday);
             addChild({label: `Bugün + Bu Hafta`, value: `${wth} saat, ${wtm} dakika`});
 
-            const [rth, rtm] = calculateRemaining(weekTotalWithToday, true);
-            addChild({label: `Bu Hafta Kalan`, value: `${rth} saat, ${rtm} dakika`, class: weekRemainingElem});
+            const [rwth, rwtm] = calculateRemaining(weekTotalWithToday, true);
+            addChild({label: `Bu Hafta Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
 
-            if (today.day() === 5 && rth < 9) {
+            let leaveTime, lh,lm;
+            if (today.day() === 5 && rwth < 9) {
                 document.querySelector(`div.${todayRemainingElem}`)?.remove();
+                leaveTime = today.add(rwth, 'h').add(rwtm+1, 'm');
+                lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
+                lm = leaveTime.minute() < 10 ? `0${leaveTime.minute()}` : leaveTime.minute();
+            } else {
+                leaveTime = today.add(rh, 'h').add(rm+1, 'm');
+                lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
+                lm = leaveTime.minute() < 10 ? `0${leaveTime.minute()}` : leaveTime.minute();
             }
+            addChild({label: `Bugün Çıkış Saati`, value: ` ~ ${lh} : ${lm}`, style: 'margin-top:15px;'});
         }
+
+        document.querySelector('#script-notice-box')
+            .insertAdjacentHTML('beforeend', `<div style="padding-bottom:5px;font-size:10px;color:lightgray;">version: ${version}</div>`);
     }
 
     addNoticeBox();

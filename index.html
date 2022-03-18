@@ -16,7 +16,7 @@
         <div class="flex space-x-20">
             <div>
                 <a class="w-full sm:w-auto flex-none bg-gray-900 hover:bg-gray-700 text-white text-xl leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-900 focus:outline-none transition-colors duration-200" id="bookmarklet" href="">Time Calculator</a>
-                <p class="mt-4 text-xs text-center">stable version [v2.0.1]</p>
+                <p class="mt-4 text-xs text-center">stable version [<span class="version"></span>]</p>
             </div>
             <div>
                 <a class="w-full sm:w-auto flex-none bg-gray-900 hover:bg-gray-700 text-white text-xl leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-900 focus:outline-none transition-colors duration-200" id="bookmarklet-2" href="">Time Calculator</a>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <a href="old/index.html">Old Version</a>
-        <span class="text-gray-300">Latest Version: v2.0.1</span>
+        <span class="text-gray-300">Latest Version: <span class="version"></span></span>
       </div>
 
       <div class="relative my-5 lg:mx-40">
@@ -34,6 +34,7 @@
   </div>
 
   <script type="text/javascript">
+    var version = 'v2.1.0';
     var client = new XMLHttpRequest();
     client.open('GET', 'bookmarklet.js');
     client.addEventListener('load', function() {
@@ -44,6 +45,9 @@
     client.send();
     document.querySelector('#bookmarklet-2')
         .setAttribute('href', `javascript:(function(){const c=new XMLHttpRequest;c.open('GET','https://raw.githubusercontent.com/burakdemirtas-jtf/show-week-working-hours/main/bookmarklet.js'),c.addEventListener('load',(function(){const s=c.responseText.replace(/(\r\n|\n|\r)/gm,'');eval(s)})),c.send()})();`)
+    document.querySelectorAll('span.version').forEach((elem) => {
+      elem.innerHTML = version;
+    });
   </script>
 </body>
 </html>
