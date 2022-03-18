@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.1.0';
+    const version = 'v2.1.1';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -150,18 +150,20 @@
             const [rwth, rwtm] = calculateRemaining(weekTotalWithToday, true);
             addChild({label: `Bu Hafta Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
 
-            let leaveTime, lh,lm;
             if (today.day() === 5 && rwth < 9) {
                 document.querySelector(`div.${todayRemainingElem}`)?.remove();
-                leaveTime = today.add(rwth, 'h').add(rwtm+1, 'm');
-                lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
-                lm = leaveTime.minute() < 10 ? `0${leaveTime.minute()}` : leaveTime.minute();
-            } else {
-                leaveTime = today.add(rh, 'h').add(rm+1, 'm');
-                lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
-                lm = leaveTime.minute() < 10 ? `0${leaveTime.minute()}` : leaveTime.minute();
+                rh = rwth;
+                rm = rwtm;
             }
-            addChild({label: `Bugün Çıkış Saati`, value: ` ~ ${lh} : ${lm}`, style: 'margin-top:15px;'});
+
+            if (rh !== 0 || rm !== 0) {
+                leaveTime = today.add(rh, 'h').add(rm, 'm');
+                lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
+                lm = leaveTime.minute() < 10 ? `0${leaveTime.minute()}` : leaveTime.minute();
+                addChild({label: `Bugün Çıkış Saati`, value: ` ~ ${lh} : ${lm}`, style: 'margin-top:15px;'});
+            } else {
+                addChild({label: `Bugün Çıkış Saati`, value: `Çıkış Yapabilirsiniz!`, style: 'margin-top:15px;'});
+            }
         }
 
         document.querySelector('#script-notice-box')

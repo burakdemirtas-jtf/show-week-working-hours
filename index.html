@@ -34,8 +34,8 @@
   </div>
 
   <script type="text/javascript">
-    var version = 'v2.1.0';
-    var client = new XMLHttpRequest();
+    const version = 'v2.1.1';
+    const client = new XMLHttpRequest();
     client.open('GET', 'bookmarklet.js');
     client.addEventListener('load', function() {
       const bookmarkletScript = client.responseText.replace(/(\r\n|\n|\r)/gm, '');
