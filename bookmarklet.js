@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.1.1';
+    const version = 'v2.1.2';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -136,7 +136,11 @@
 
                 let [wh, wm] = row.querySelector('td:nth-child(6)').innerText.split(':');
                 wh = parseInt(wh);
-                wh = wh > 11 ? 11 : wh;
+                wm = parseInt(wm);
+                if (wh >= 11 && wh > 0) {
+                    wh = 11;
+                    wm = 0;
+                }
                 weekTotal += ((wh * 60) + parseInt(wm));
             });
         
