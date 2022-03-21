@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.1.2';
+    const version = 'v2.1.3';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -7,8 +7,8 @@
     }
 
     const month = document.querySelector('select#Donem_Id');
-    if (!month || month.value === 'null') {
-        alert('Please select a month for your records.');
+    if (!month || month.value === 'null' || month.options[1].selected === false) {
+        alert('Please select current month to see and calculate your records.');
         return;
     }
 
@@ -159,7 +159,9 @@
                 rh = rwth;
                 rm = rwtm;
             }
+        }
 
+        if (firstRecord) {
             if (rh !== 0 || rm !== 0) {
                 leaveTime = today.add(rh, 'h').add(rm, 'm');
                 lh = leaveTime.hour() < 10 ? `0${leaveTime.hour()}` : leaveTime.hour();
