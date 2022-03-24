@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.1.3';
+    const version = 'v2.1.4';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -23,13 +23,13 @@
     }
 
     function calculateTime(time) {
-        let minute = time * 60;
+        let minute = Math.round(time * 60);
         let hour = 0;
         while (minute >= 60) {
             minute -= 60;
             hour++;
         }
-        return [hour, Math.floor(minute)];
+        return [hour, minute];
     }
 
     function calculateRemaining(time, week = false) {
@@ -95,8 +95,8 @@
             }
             let [currentDate, currentTime] = timeNormalize(rowTime);
             const time = dayjs(`${currentDate} ${currentTime}`);
-            if (today.isSame(dayjs(time), 'day') && !firstRecord) {
-                firstRecord = time;
+            if (today.isSame(time, 'day') && !firstRecord) {
+                firstRecord = time.add((time.get('second') > 1 ? 60 - time.get('second') : 1), 'second');
             }
         });
 
@@ -109,8 +109,6 @@
             [rh, rm] = calculateRemaining(diff);
             addChild({label: `Bugün`, value: th > 0 ? `${th} saat, ${tm} dakika` : `${tm} dakika`});
             addChild({label: `Bugün Kalan`, value: rh > 0 ? `${rh} saat, ${rm} dakika` : `${rm} dakika`, class: todayRemainingElem});
-            console.log(`Today: ${th} hours, ${tm} minutes`);
-            console.log(`Remaining: ${rh} hours, ${rm} minutes`);
         }
 
         /** WEEK */
@@ -173,7 +171,7 @@
         }
 
         document.querySelector('#script-notice-box')
-            .insertAdjacentHTML('beforeend', `<div style="padding-bottom:5px;font-size:10px;color:lightgray;">version: ${version}</div>`);
+            .insertAdjacentHTML('beforeend', `<a href="https://burakdemirtas-jtf.github.io/show-week-working-hours/" target="_blank" style="display:inline-block;padding-bottom:5px;font-size:10px;color:lightgray;">version: ${version}</a>`);
     }
 
     addNoticeBox();
