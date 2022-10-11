@@ -171,8 +171,9 @@
             const [rwthts, rwtmts] = calculateRemainingFromThirtySix(weekTotalWithToday, true);
             const [rwthtwentys, rwtmtwentys] = calculateRemainingFromTwentySeven(weekTotalWithToday, true);
             addChild({label: `Bu Hafta 45'ten Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
-            addChild({label: `Bu Hafta 36'dan Kalan`, value: `${rwthts} saat, ${rwtmts} dakika`, class: weekRemainingElem});
-            addChild({label: `Bu Hafta 27'den Kalan`, value: `${rwthtwentys} saat, ${rwtmtwentys} dakika`, class: weekRemainingElem});
+            addChild({label: `Bu Hafta 36'dan Kalan`, value: ` ${rwthts} saat, ${rwtmts} dakika`, style: 'margin-top:15px;'});
+            addChild({label: ``, value: ``});
+            addChild({label: `Bu Hafta 27'den Kalan`, value: `${rwthtwentys} saat, ${rwtmtwentys} dakika`});
 
             if (today.day() === 5 && rwth < 9) {
                 document.querySelector(`div.${todayRemainingElem}`)?.remove();
