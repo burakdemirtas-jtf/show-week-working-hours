@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.1.4';
+    const version = 'v2.2.0';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -40,23 +40,14 @@
         return calculateTime(remaining);
     }
     
-    function calculateRemainingFromThirtySix(time, week = false) {
-        const remaining = (week ? 36 : 9) - time;
-        if (remaining <= 0) {
+    function calculateRemainingX(time, x) {
+        let [hour, min] = calculateRemaining(time, true);
+        hour = hour - x;
+        if (hour < 0) {
             return [0, 0];
         }
-        return calculateTime(remaining);
+        return [hour, min];
     }
-    
-    function calculateRemainingFromTwentySeven(time, week = false) {
-        const remaining = (week ? 27 : 9) - time;
-        if (remaining <= 0) {
-            return [0, 0];
-        }
-        return calculateTime(remaining);
-    }
-
-    
 
     function timeNormalize(value) {
         let [date, time] = value.split(' ');
@@ -74,15 +65,16 @@
         const box = document.createElement('div');
         box.id = boxId;
         Object.assign(box.style, {
-            width: '350px',
+            width: '380px',
             position: 'absolute',
-            left: '20px',
-            top: '700px',
+            left: '518px',
+            top: '618px',
             backgroundColor: 'white',
             zIndex: '9999',
             paddingTop: '10px',
             paddingLeft: '10px',
             boxShadow: '0 5px 10px rgb(0 0 0 / 20%)',
+            fontSize: '16px',
         });
         document.body.appendChild(box);
     }
@@ -90,10 +82,10 @@
     function addChild(child) {
         const withWrapper = (c) => `<div class="script-input ${child.class}" style="${child.style}">${c}</div>`;
         const label = `
-        <label style="font-size:1.3rem;float:left;font-weight:bold;width:9.2em;text-align:right;margin-top:3px">${child.label}:</label>
+        <label style="font-size:0.9em;float:left;font-weight:bold;width:10em;text-align:right;margin-top:3px">${child.label}:</label>
         `;
         const input = `
-        <p style="font-size:1.5rem;width:10em;margin-right:5px;margin-left:5px;display:inline-block;margin-top:1px;">${child.value}</p>
+        <p style="font-size:1em;width:10em;margin-right:5px;margin-left:5px;display:inline-block;margin-top:1px;">${child.value}</p>
         `;
         document.querySelector('#script-notice-box').insertAdjacentHTML('beforeend', withWrapper(`${label}${input}`));
     }
@@ -168,11 +160,19 @@
             addChild({label: `Bugün + Bu Hafta`, value: `${wth} saat, ${wtm} dakika`});
 
             const [rwth, rwtm] = calculateRemaining(weekTotalWithToday, true);
-            const [rwthts, rwtmts] = calculateRemainingFromThirtySix(weekTotalWithToday, true);
-            const [rwthtwentys, rwtmtwentys] = calculateRemainingFromTwentySeven(weekTotalWithToday, true);
-            addChild({label: `Bu Hafta 45'ten Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
-            addChild({label: `Bu Hafta 36'dan Kalan`, value: `${rwthts} saat, ${rwtmts} dakika`, style: 'margin-top:15px;'});
-            addChild({label: `Bu Hafta 27'den Kalan`, value: `${rwthtwentys} saat, ${rwtmtwentys} dakika`, style: 'margin-top:15px;'});
+            const [rwth36, rwtm36] = calculateRemainingX(weekTotalWithToday, 9);
+            const [rwth27, rwtm27] = calculateRemainingX(weekTotalWithToday, 18);
+            const [rwth18, rwtm18] = calculateRemainingX(weekTotalWithToday, 27);
+            addChild({label: `Bu Hafta Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem, style: 'margin-top:10px;'});
+            if (rwth36 !== 0 && rwtm36 !== 0) {
+                addChild({label: `36 saat için`, value: `${rwth36} saat, ${rwtm36} dakika`, style: 'font-size:13px;margin-top:-6px'});
+            }
+            if (rwth27 !== 0 && rwtm27 !== 0) {
+                addChild({label: `27 saat için`, value: `${rwth27} saat, ${rwtm27} dakika`, style: 'font-size:13px;margin-top:-6px'});
+            }
+            if (rwth18 !== 0 && rwtm18 !== 0) {
+                addChild({label: `18 saat için`, value: `${rwth18} saat, ${rwtm18} dakika`, style: 'font-size:13px;margin-top:-6px'});
+            }
             
             if (today.day() === 5 && rwth < 9) {
                 document.querySelector(`div.${todayRemainingElem}`)?.remove();
