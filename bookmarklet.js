@@ -39,6 +39,24 @@
         }
         return calculateTime(remaining);
     }
+    
+    function calculateRemainingFromThirtySix(time, week = false) {
+        const remaining = (week ? 36 : 9) - time;
+        if (remaining <= 0) {
+            return [0, 0];
+        }
+        return calculateTime(remaining);
+    }
+    
+    function calculateRemainingFromTwentySeven(time, week = false) {
+        const remaining = (week ? 27 : 9) - time;
+        if (remaining <= 0) {
+            return [0, 0];
+        }
+        return calculateTime(remaining);
+    }
+
+    
 
     function timeNormalize(value) {
         let [date, time] = value.split(' ');
@@ -150,8 +168,12 @@
             addChild({label: `Bugün + Bu Hafta`, value: `${wth} saat, ${wtm} dakika`});
 
             const [rwth, rwtm] = calculateRemaining(weekTotalWithToday, true);
-            addChild({label: `Bu Hafta Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
-
+            const [rwthts, rwtmts] = calculateRemainingFromThirtySix(weekTotalWithToday, true);
+            const [rwthtwentys, rwtmtwentys] = calculateRemainingFromTwentySeven(weekTotalWithToday, true);
+            addChild({label: `Bu Hafta 45'ten Kalan`, value: `${rwth} saat, ${rwtm} dakika`, class: weekRemainingElem});
+            addChild({label: `Bu Hafta 36'dan Kalan`, value: `${rwthts} saat, ${rwtmts} dakika`, style: 'margin-top:15px;'});
+            addChild({label: `Bu Hafta 27'den Kalan`, value: `${rwthtwentys} saat, ${rwtmtwentys} dakika`, style: 'margin-top:15px;'});
+            
             if (today.day() === 5 && rwth < 9) {
                 document.querySelector(`div.${todayRemainingElem}`)?.remove();
                 rh = rwth;
