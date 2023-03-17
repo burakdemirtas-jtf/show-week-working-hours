@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.2.0';
+    const version = 'v2.3.0';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -138,7 +138,7 @@
                 )) {
                     firstDayOfWeek = true;
                 }
-                if (!firstDayOfWeek) {
+                if (!firstDayOfWeek || today.isSame(dayjs(`${rowDate}`), 'day')) {
                     return;
                 }
 
