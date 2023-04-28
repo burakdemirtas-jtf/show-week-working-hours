@@ -1,5 +1,5 @@
 (function(){
-    const version = 'v2.3.0';
+    const version = 'v2.4.0';
 
     if (!document.querySelector('#grid_kesin_giris_cikis')) {
         alert('Open the "PDKS Giriş Çıkış Bilgileri Kartı" panel, then use the bookmarklet');
@@ -7,7 +7,8 @@
     }
 
     const month = document.querySelector('select#Donem_Id');
-    if (!month || month.value === 'null' || month.options[1].selected === false) {
+    if (!month || month.value === 'null' 
+        || !month.options[month.selectedIndex].textContent.includes((new Date()).toLocaleString('tr-TR', { month: 'long' }).toLocaleUpperCase('tr-TR'))) {
         alert('Please select current month to see and calculate your records.');
         return;
     }
@@ -193,7 +194,7 @@
         }
 
         document.querySelector('#script-notice-box')
-            .insertAdjacentHTML('beforeend', `<a href="https://burakdemirtas-jtf.github.io/show-week-working-hours/" target="_blank" style="display:inline-block;padding-bottom:5px;font-size:10px;color:lightgray;">version: ${version}</a>`);
+            .insertAdjacentHTML('beforeend', `<a href="https://burakdemirtas-jtf.github.io/show-week-working-hours/" target="_blank" style="display:inline-block;padding-bottom:5px;font-size:10px;color:darkgray;">version: ${version} | Check Updates</a>`);
     }
 
     addNoticeBox();
